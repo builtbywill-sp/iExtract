@@ -1,5 +1,5 @@
 
-> This repo was generated using a custom CLI tooling system by [builtbywill.dev](https://builtbywill.dev)
+> This repo was generated using a custom CLI tooling system by [Silentprototype.com](https://www.silentprototyp.com)
 
 ---
 
@@ -42,9 +42,9 @@ No redistribution. No modification. No integration into training pipelines.
 ---
 
 **BuiltByWill + SilentPrototype™**  
-[https://builtbywill.dev](https://builtbywill.dev)
+[silentprototype.com](https://www.silentprototyp.com)
 
 ---
 
-Powered by [BuiltByWill.dev](https://builtbywill.dev)  
+Powered by [silentprototype.com](https://www.silentprototyp.com)  
 Phase–Coded | Method–Signed | Terminal–Forged
