@@ -30,10 +30,6 @@ Built for legal clarity, forensic readiness, and cold hard truth.
 | Future formats (PDF, JSON, ZIP) | 🚧 |
 | Custom logo & watermarking | 🚧 |
 
-## 📷 Screenshot
-
-> Electron UI MVP, local build — no external dependencies.  
-![Screenshot](./SCREENSHOTS/iextract-electron.png)
 
 ## 🔐 License
 
