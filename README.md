@@ -1,4 +1,3 @@
-# iExtract
 
 > This repo was generated using a custom CLI tooling system by [builtbywill.dev](https://builtbywill.dev)
 
