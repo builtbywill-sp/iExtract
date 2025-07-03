@@ -1,0 +1,132 @@
+/* Desert Dossier UI Theme */
+
+* {
+  box-sizing: border-box;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+body {
+  margin: 0;
+  background-color: #2e261d; /* Dark tan paper background */
+  color: #e4dac3;             /* Pale parchment text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.terminal {
+  background-color: #3a3027; /* Container color */
+  padding: 2rem;
+  border: 1px solid #7b6a58;
+  width: 400px;
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: 0 0 12px #00000088;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #facc00;
+  line-height: 1;
+}
+
+
+
+header h1 {
+  text-align: center;
+  margin: 0;
+  color: #ffae3d; /* Desert orange */
+}
+
+.subline {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #b4a590;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #ffe4b3;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.25rem;
+  background-color: #4a3f35;
+  color: #f0eada;
+  border: 1px solid #7b6a58;
+  border-radius: 4px;
+}
+
+.date-range {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.date-range div {
+  flex: 1;
+}
+
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #da9833; /* Gold tan */
+  border: none;
+  color: #2e261d;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #a86c1c;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #eaaa42;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.file-ready {
+  color: #6ef78d; /* Green glow */
+  transition: color 0.3s ease;
+}
+
+.uploaded {
+  font-weight: bold;
+}
+
+.message-box {
+  margin-top: 1.5rem;
+  border: 1px dashed #ffe9b1;
+  padding: 1rem;
+  background-color: #1e1a15;
+  color: #c9bb9c;
+  font-size: 0.85rem;
+  border-radius: 5px;
+  white-space: pre-wrap;
+}

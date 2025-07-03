@@ -1,13 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>iExtract</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+
+    <!-- Load SQL.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
+    <script>
+      let SQL = null;
+      initSqlJs({
+        locateFile: (file) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`,
+      }).then((SQLLib) => {
+        SQL = SQLLib;
+        console.log("✅ SQL.js initialized.");
+        const script = document.createElement("script");
+        script.src = "index.js";
+        document.body.appendChild(script);
+      });
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="container">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="iExtract Logo" class="logo" />
+        <h1 style="margin: 0">iExtract</h1>
+      </div>
+
+      <p>Drag. Filter. Extract. Own the record.</p>
+
+      <label id="fileLabel" for="fileInput">
+        📂 Select <code>chat.db</code>
+      </label>
+      <input type="file" id="fileInput" accept=".db" />
+
+      <label for="filterMode">📊 Export mode</label>
+      <select id="filterMode">
+        <option value="number" selected>Filter by number</option>
+        <option value="full">Full chat export</option>
+      </select>
+
+      <div id="phoneFilterContainer">
+        <label for="phoneFilter">📞 Phone number</label>
+        <input type="text" id="phoneFilter" placeholder="+1XXXXXXXXXX" />
+      </div>
+
+      <label for="format">📄 Export format</label>
+      <select id="format">
+        <option value="CSV">CSV</option>
+        <option value="JSON">JSON</option>
+      </select>
+
+      <button id="generate">► GENERATE REPORT</button>
+    </div>
   </body>
 </html>
