@@ -29,31 +29,14 @@
         <h1 style="margin: 0">iExtract</h1>
       </div>
 
-      <p>Drag. Filter. Extract. Own the record.</p>
+      <p>Offline iMessage extraction.</p>
 
       <label id="fileLabel" for="fileInput">
         📂 Select <code>chat.db</code>
       </label>
       <input type="file" id="fileInput" accept=".db" />
 
-      <label for="filterMode">📊 Export mode</label>
-      <select id="filterMode">
-        <option value="number" selected>Filter by number</option>
-        <option value="full">Full chat export</option>
-      </select>
-
-      <div id="phoneFilterContainer">
-        <label for="phoneFilter">📞 Phone number</label>
-        <input type="text" id="phoneFilter" placeholder="+1XXXXXXXXXX" />
-      </div>
-
-      <label for="format">📄 Export format</label>
-      <select id="format">
-        <option value="CSV">CSV</option>
-        <option value="JSON">JSON</option>
-      </select>
-
-      <button id="generate">► GENERATE REPORT</button>
+      <button id="generate">► GENERATE FULL EXPORT (CSV)</button>
     </div>
   </body>
 </html>

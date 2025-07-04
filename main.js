@@ -37,13 +37,10 @@ ipcMain.handle("run-extractor", async (event, dbPath, number, format) => {
     const timestamp = Date.now();
     const outFile = path.join(
       desktopDir,
-      `iextract_output_${timestamp}.${format}`
+      `iextract_output_${timestamp}.csv`
     );
 
-    const args = [dbPath];
-    if (number) args.push(number);
-    if (format) args.push(format);
-    args.push(outFile); // 🔥 NEW: pass final output path
+    const args = [dbPath, outFile]; // Only pass db and output path
 
     execFile(
       "node",

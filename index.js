@@ -9,12 +9,8 @@ fileInput.addEventListener("change", () => {
 });
 
 generateBtn.addEventListener("click", async () => {
-  const mode = document.getElementById("filterMode").value;
-  const format = document.getElementById("format").value;
-  const phone =
-    mode === "number"
-      ? document.getElementById("phoneFilter").value.trim().replace(/[^\d+]/g, "")
-      : "";
+  const phone = "";
+  const format = "csv";
 
   if (!fileInput.files.length) {
     return alert("❌ No file selected.");
