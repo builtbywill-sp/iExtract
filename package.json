@@ -1,11 +1,43 @@
 {
   "name": "iextract",
   "version": "1.0.0",
+  "description": "Fully offline iMessage export tool.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "author": {
+    "name": "BuiltByWill",
+    "email": "builtbywill@proton.me"
   },
   "devDependencies": {
-    "electron": "^28.0.0"
+    "electron": "^28.0.0",
+    "electron-builder": "^24.14.1"
+  },
+  "build": {
+    "appId": "com.builtbywill.iextract",
+    "productName": "iExtract",
+    "files": ["**/*"],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icons/512x512.png"
+    }
   }
 }

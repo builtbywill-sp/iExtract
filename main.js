@@ -57,3 +57,59 @@ ipcMain.handle("run-extractor", async (event, dbPath, number, format) => {
     );
   });
 });
+
+// Merge DB files handler
+const fs = require("fs");
+
+ipcMain.handle("merge-db-files", async (event, filePaths) => {
+  try {
+    const dbPath = filePaths.find(file => file.endsWith(".db"));
+    const shmPath = filePaths.find(file => file.endsWith(".db-shm"));
+    const walPath = filePaths.find(file => file.endsWith(".db-wal"));
+
+    if (!dbPath || !shmPath || !walPath) {
+      return { success: false, error: "All three files (.db, .db-shm, .db-wal) must be selected." };
+    }
+
+    console.log("Merging files:");
+    console.log("DB:", dbPath);
+    console.log("SHM:", shmPath);
+    console.log("WAL:", walPath);
+
+    const { execSync } = require("child_process");
+    execSync(`sqlite3 "${dbPath}" "PRAGMA wal_checkpoint(FULL);"`, { stdio: 'inherit' });
+
+    console.log("WAL checkpoint executed.");
+
+    return { success: true, mergedPath: dbPath };
+  } catch (err) {
+    console.error("Merge failed:", err.message);
+    return { success: false, error: err.message };
+  }
+});
+
+// Finalize merged SQLite database handler
+ipcMain.handle("finalize-db", async (event, filePaths) => {
+  if (!filePaths || filePaths.length !== 3) {
+    return { success: false, error: "Please provide chat.db, .shm, and .wal files." };
+  }
+
+  try {
+    // No actual operation needed — accessing the DB causes WAL to commit
+    const sqlite3 = require("sqlite3").verbose();
+    const db = new sqlite3.Database(filePaths[0]);
+
+    await new Promise((resolve, reject) => {
+      db.get("SELECT name FROM sqlite_master WHERE type='table';", (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+
+    db.close();
+
+    return { success: true, message: "Database finalized successfully." };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});

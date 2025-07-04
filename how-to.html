@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Use iExtract</title>
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+  <div class="howto-container">
+
+    <button class="howto-back">
+    <a href="index.html" class="howto-back">← Back to iExtract</a>
+    </button>
+    <p class="howto-intro">
+      This quick guide will help you locate your <code>chat.db</code> file and run your first export.
+    </p>
+
+    <section class="howto-section">
+      <h2>Step 1: Find your iMessage Database</h2>
+      <ul>
+        <li>On your Mac, open Finder</li>
+        <li>Press <code>Cmd + Shift + G</code></li>
+        <li>Paste: <code>~/Library/Messages</code></li>
+        <li>
+          Look for these files:
+          <p class="howto-warning">
+            <strong>Important:</strong> Copy these files to your Desktop or another easy-to-find location before uploading.
+          </p>
+          <ul>
+            <li><code>chat.db</code></li>
+            <li><code>chat.db-wal</code></li>
+            <li><code>chat.db-shm</code></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="howto-section">
+      <h2>Step 2: Upload to iExtract</h2>
+      <ol>
+        <li>Upload <code>chat.db</code> in the second box</li>
+        <li>Optionally upload <code>.shm</code> and <code>.wal</code> files in the top box</li>
+        <li>Click “🧬 PREPARE FILES”</li>
+        <li>Then click “► GENERATE REPORT”</li>
+      </ol>
+    </section>
+
+    <section class="howto-section">
+      <h2>Step 3: Windows Users – Backup with iCloud</h2>
+      <ul>
+        <li>Search online for "iCloud for Windows" or visit the Apple website from a separate browser to download it</li>
+        <li>Sign in with your Apple ID</li>
+        <li>Ensure "iCloud Drive" and "Messages" are checked in iCloud settings</li>
+        <li>Wait for sync to complete – this may take time depending on your network</li>
+        <li>Navigate to the synced folder using File Explorer</li>
+        <li>Look for any chat or message-related SQLite database files</li>
+        <li>Copy them to your Desktop or easy-to-find folder before uploading</li>
+      </ul>
+    </section>
+
+    <p class="howto-outro">
+      Your CSV will appear on your desktop when it’s done ✅
+    </p>
+  </div>
+</body>
+</html>

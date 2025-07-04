@@ -130,3 +130,220 @@ button:hover {
   border-radius: 5px;
   white-space: pre-wrap;
 }
+/* Desert Dossier UI Theme */
+
+* {
+  box-sizing: border-box;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+body {
+  margin: 0;
+  background-color: #2e261d; /* Dark tan paper background */
+  color: #e4dac3;             /* Pale parchment text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.terminal {
+  background-color: #3a3027; /* Container color */
+  padding: 2rem;
+  border: 1px solid #7b6a58;
+  width: 400px;
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: 0 0 12px #00000088;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #facc00;
+  line-height: 1;
+}
+
+
+
+header h1 {
+  text-align: center;
+  margin: 0;
+  color: #ffae3d; /* Desert orange */
+}
+
+.subline {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #b4a590;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #ffe4b3;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.4rem;
+  margin-top: 0.25rem;
+  background-color: #4a3f35;
+  color: #f0eada;
+  border: 1px solid #7b6a58;
+  border-radius: 4px;
+}
+
+.date-range {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.date-range div {
+  flex: 1;
+}
+
+button {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 0.6rem;
+  background-color: #da9833; /* Gold tan */
+  border: none;
+  color: #2e261d;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #a86c1c;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: #eaaa42;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.file-ready {
+  color: #6ef78d; /* Green glow */
+  transition: color 0.3s ease;
+}
+
+.uploaded {
+  font-weight: bold;
+}
+
+.message-box {
+  margin-top: 1.5rem;
+  border: 1px dashed #ffe9b1;
+  padding: 1rem;
+  background-color: #1e1a15;
+  color: #c9bb9c;
+  font-size: 0.85rem;
+  border-radius: 5px;
+  white-space: pre-wrap;
+}
+
+/* How-To Page Styling */
+/* How-To Page Styling */
+.howto {
+  padding: 2.5rem 2rem 2.5rem 2rem;
+  max-width: 700px;
+  margin: 2.5rem auto 0 auto;
+  background-color: #3a3027;
+  border: 1px solid #7b6a58;
+  border-radius: 8px;
+  color: #e4dac3;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 0 12px #00000088;
+}
+
+.howto h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #ffeeb3;
+  text-align: center;
+}
+
+.howto h2 {
+  color: #facc00;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 2.25rem;
+}
+
+.howto p {
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.howto code {
+  background-color: #4a3f35;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  color: #f0eada;
+  font-size: 0.9rem;
+}
+
+.howto strong {
+  color: #ffdf8a;
+}
+
+.howto ol {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.howto ol li {
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+
+.howto ul {
+  margin-top: 0.5rem;
+  padding-left: 1.25rem;
+}
+
+.howto ul li {
+  margin-bottom: 0.4rem;
+}
+
+.back-button {
+  display: inline-block;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.4rem 1rem;
+  background-color: #da9833;
+  color: #2e261d;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back-button:hover {
+  background-color: #eaaa42;
+}

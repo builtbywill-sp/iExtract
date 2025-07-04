@@ -29,14 +29,25 @@
         <h1 style="margin: 0">iExtract</h1>
       </div>
 
-      <p>Offline iMessage extraction.</p>
+      <p>
+        Merge. Extract. Own the record.
+        <a href="how-to.html" style="margin-left: 10px; font-size: 0.9em; color: #ffd369;">🛈 How to Use</a>
+      </p>
+
+      <label id="mergeLabel" for="mergeInput">
+        📎 Optional: Select .shm and .wal files to prepare chat.db
+      </label>
+      <input type="file" id="mergeInput" multiple accept=".db-shm,.db-wal" />
+      
+
+      <hr />
 
       <label id="fileLabel" for="fileInput">
-        📂 Select <code>chat.db</code>
+        📂 Required: Select your chat.db file
       </label>
       <input type="file" id="fileInput" accept=".db" />
-
-      <button id="generate">► GENERATE FULL EXPORT (CSV)</button>
+      <button id="mergeFiles">🧬 PREPARE FILES</button>
+      <button id="generate">► GENERATE REPORT</button>
     </div>
   </body>
 </html>
