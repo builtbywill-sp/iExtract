@@ -1,8 +1,11 @@
 const fileInput = document.getElementById("fileInput");
 const generateBtn = document.getElementById("generate");
+const outputBtn = document.getElementById("outputBtn");
 const fileLabel = document.getElementById("fileLabel");
 const mergeBtn = document.getElementById("mergeFiles");
 const mergeInput = document.getElementById("mergeInput");
+
+let selectedOutputPath = "";
 
 fileInput.addEventListener("change", () => {
   fileLabel.innerHTML = fileInput.files.length
@@ -18,11 +21,32 @@ generateBtn.addEventListener("click", async () => {
     return alert("❌ No file selected.");
   }
 
+  const outputPath = selectedOutputPath;
+  console.log("📦 Final output path used for export:", outputPath);
+  if (!outputPath) {
+    return alert("❌ No output location selected.");
+  }
+
   const file = fileInput.files[0];
-  const filePath = file.path;
+
+  if (!file) {
+    console.error("❌ No file selected (fileInput.files[0] is null).");
+    return alert("❌ File input missing.");
+  }
+
+  const filePath = file.path || file.webkitRelativePath || file.name;
+
+  console.log("🧠 Resolved file path:", filePath);
+
+  if (!filePath || !outputPath || !format) {
+    console.error("❌ Missing required input:", { filePath, outputPath, format });
+    return alert("❌ Missing input. Please check file, output location, and format.");
+  }
+
+  console.log("📤 Extractor input:", { filePath, phone, format, outputPath });
 
   try {
-    const result = await window.electronAPI.runExtractor(filePath, phone, format);
+    const result = await window.electronAPI.runExtractor(filePath, phone, format, outputPath);
 
     alert(`✅ Export complete.\nCheck terminal or output folder.`);
     console.log(result);
@@ -45,7 +69,7 @@ mergeBtn.addEventListener("click", async () => {
   }
 
   const allFiles = [dbFile, ...otherFiles];
-  const paths = allFiles.map((file) => file.path);
+  const paths = allFiles.map((file) => file.path || file.webkitRelativePath || file.name);
 
   console.log("🧪 Paths to merge:", paths);
 
@@ -60,5 +84,20 @@ mergeBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error("❌ Merge failed:", err);
     alert("❌ Merge error: " + err.message);
+  }
+});
+
+outputBtn.addEventListener("click", async () => {
+  try {
+    const outputPath = await window.electronAPI.selectOutputPath();
+    if (!outputPath) {
+      alert("❌ No output location selected.");
+      return;
+    }
+    console.log("📂 Output folder selected:", outputPath);
+    selectedOutputPath = outputPath;
+  } catch (err) {
+    console.error("❌ Error selecting output path:", err);
+    alert("❌ Failed to select output path.");
   }
 });

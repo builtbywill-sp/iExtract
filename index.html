@@ -7,20 +7,7 @@
     <link rel="stylesheet" href="index.css" />
     <link rel="icon" type="image/png" href="assets/logo.png" />
 
-    <!-- Load SQL.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
-    <script>
-      let SQL = null;
-      initSqlJs({
-        locateFile: (file) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`,
-      }).then((SQLLib) => {
-        SQL = SQLLib;
-        console.log("✅ SQL.js initialized.");
-        const script = document.createElement("script");
-        script.src = "index.js";
-        document.body.appendChild(script);
-      });
-    </script>
+    <script src="index.js" defer></script>
   </head>
   <body>
     <div class="container">
@@ -46,6 +33,10 @@
         📂 Required: Select your chat.db file
       </label>
       <input type="file" id="fileInput" accept=".db" />
+      <label id="outputLabel" for="outputPath">
+        💾 Select output folder for CSV export
+      </label>
+      <button id="outputBtn">📁 Choose Output Location</button>
       <button id="mergeFiles">🧬 PREPARE FILES</button>
       <button id="generate">► GENERATE REPORT</button>
     </div>
