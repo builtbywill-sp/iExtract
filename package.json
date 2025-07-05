@@ -5,12 +5,14 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "rebuild": "electron-rebuild"
   },
   "author": "BuiltByWill <builtbywill@proton.me>",
   "devDependencies": {
-    "electron": "^28.1.0",
-    "electron-builder": "^24.9.1"
+    "electron": "37.2.0",
+    "electron-builder": "^24.9.1",
+    "electron-packager": "^17.1.2"
   },
   "build": {
     "appId": "com.builtbywill.iextract",
@@ -55,6 +57,10 @@
   },
   "homepage": "https://github.com/builtbywill-sp/iExtract#readme",
   "dependencies": {
-    "better-sqlite3": "^12.2.0"
+    "better-sqlite3": "12.2.0",
+    "electron-rebuild": "3.2.9"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
