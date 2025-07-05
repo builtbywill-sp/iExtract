@@ -12,16 +12,18 @@
   "devDependencies": {
     "electron": "37.2.0",
     "electron-builder": "^24.9.1",
-    "electron-packager": "^17.1.2"
+    "electron-rebuild": "3.2.9"
   },
   "build": {
     "appId": "com.builtbywill.iextract",
     "productName": "iExtract",
     "files": [
-      "**/*"
+      "**/*",
+      "!node_modules/.cache/**"
     ],
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "build/icon.icns"
     },
     "win": {
       "target": "nsis"
@@ -43,7 +45,8 @@
       ],
       "category": "Utility",
       "icon": "build/icons/512x512.png"
-    }
+    },
+    "copyright": "Copyright © 2025 BuiltByWill"
   },
   "repository": {
     "type": "git",
@@ -57,8 +60,7 @@
   },
   "homepage": "https://github.com/builtbywill-sp/iExtract#readme",
   "dependencies": {
-    "better-sqlite3": "12.2.0",
-    "electron-rebuild": "3.2.9"
+    "better-sqlite3": "12.2.0"
   },
   "engines": {
     "node": "20.x"
