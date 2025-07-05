@@ -11,15 +11,6 @@ console.log("🧪 Running extract.js");
 console.log("📂 dbFile:", dbFile);
 console.log("📤 outFile:", outFile);
 
-try {
-  const testLine = "message_date,sender_or_recipient,is_from_me,text,chat_id\n2025-07-05,tester,1,\"This is a test message.\",chat123";
-  fs.writeFileSync(outFile, testLine, "utf-8");
-  console.log("✅ Test CSV written to:", outFile);
-  process.exit(0);
-} catch (err) {
-  console.error("❌ Failed to write CSV:", err);
-  process.exit(1);
-}
 
 if (!outFile) {
   console.error("❌ No output path received from args.");

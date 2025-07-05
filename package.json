@@ -10,7 +10,7 @@
   "author": "BuiltByWill <builtbywill@proton.me>",
   "devDependencies": {
     "electron": "^28.1.0",
-    "electron-builder": "^24.13.1"
+    "electron-builder": "^24.9.1"
   },
   "build": {
     "appId": "com.builtbywill.iextract",
