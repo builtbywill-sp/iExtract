@@ -18,9 +18,17 @@
     "appId": "com.builtbywill.iextract",
     "productName": "iExtract",
     "files": [
-      "**/*",
+      "main.js",
+      "preload.js",
+      "index.html",
+      "index.js",
+      "extract.js",
+      "assets/**/*",
+      "build/**/*",
       "!node_modules/.cache/**"
     ],
+    "asar": true,
+    "extraFiles": ["extract.js"],
     "mac": {
       "target": "dmg",
       "icon": "build/icon.icns"

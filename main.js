@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const { execFile } = require("child_process");
 const path = require("path");
+const url = require("url"); // Add this line
+
 ipcMain.handle("run-extractor", async (event, payload) => {
   const { dbPath, number, format, outputPath } = payload || {};
   console.log("🟡 IPC handler triggered with:", dbPath, number, format, outputPath);
@@ -19,9 +21,12 @@ ipcMain.handle("run-extractor", async (event, payload) => {
       [path.join(__dirname, "extract.js"), ...args],
       (err, stdout, stderr) => {
         if (err) {
+          console.error("❌ Child process error:", err.message);
           resolve({ success: false, error: stderr || err.message });
         } else {
-          shell.showItemInFolder(outputFile); // Open location of output
+          console.log("✅ Extractor finished:", stdout);
+          // Optional: open folder only if needed
+          // shell.showItemInFolder(outputFile);
           resolve({ success: true, filename: outputFile });
         }
       }
@@ -42,13 +47,20 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle("choose-output-path", async () => {
+    console.log("📂 Output path dialog opened");
     const result = await dialog.showOpenDialog({
       properties: ["openDirectory"]
     });
     return result.filePaths[0] || null;
   });
 
-  win.loadFile('index.html');
+  win.loadURL(
+    url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true,
+    })
+  );
 
 });
 

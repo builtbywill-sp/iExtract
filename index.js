@@ -100,6 +100,11 @@ outputBtn.addEventListener("click", async () => {
     }
     console.log("📂 Output folder selected:", outputPath);
     selectedOutputPath = outputPath;
+    const outputPathDisplay = document.getElementById("outputPathDisplay");
+    if (outputPathDisplay) {
+      outputPathDisplay.textContent = outputPath;
+      outputPathDisplay.style.display = "inline";
+    }
   } catch (err) {
     console.error("❌ Error selecting output path:", err);
     alert("❌ Failed to select output path.");
