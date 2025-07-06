@@ -35,8 +35,12 @@ generateBtn.addEventListener("click", async () => {
   }
 
   const filePath = file.path || file.webkitRelativePath || file.name;
+  if (!filePath || (!filePath.includes("chat.db") && !file.name.includes("chat.db"))) {
+    alert("❌ Invalid file path. Please select the actual chat.db file.");
+    return;
+  }
 
-  console.log("🧠 Resolved file path:", filePath);
+  console.log("🧠 Resolved file path:", filePath, "file object:", file);
 
   if (!filePath || !outputPath || !format) {
     console.error("❌ Missing required input:", { filePath, outputPath, format });

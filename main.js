@@ -62,9 +62,21 @@ ipcMain.handle("finalize-db", async (event, chatDbPath, extraFiles) => {
     if (!Array.isArray(extraFiles)) {
       extraFiles = [];
     }
-    for (const file of extraFiles) {
+    console.log("📁 Attempting to copy files:", extraFiles);
+    console.log("📦 Resolved full paths:", extraFiles.map(f => path.resolve(f)));
+    for (const file of extraFiles.map(f => path.resolve(f))) {
       const targetPath = path.join(baseDir, path.basename(file));
-      fs.copyFileSync(file, targetPath);
+
+      try {
+        if (fs.existsSync(file)) {
+          console.log(`✅ Copying from: ${file} to ${targetPath}`);
+          fs.copyFileSync(file, targetPath);
+        } else {
+          console.warn(`⚠️ File not found during copy (full path missing): ${file}`);
+        }
+      } catch (copyErr) {
+        console.error(`❌ Error copying file ${file}:`, copyErr);
+      }
     }
     return { success: true };
   } catch (err) {

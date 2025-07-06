@@ -49,8 +49,15 @@ try {
     )
   ].join("\n");
 
-  fs.writeFileSync(outFile, csv, "utf-8");
-  console.log(`✅ Export complete: ${outFile}`);
+  try {
+    fs.writeFileSync(outFile, csv, "utf-8");
+    const preview = csv.split('\n').slice(0, 5).join('\n');
+    console.log("📝 Preview of CSV output:\n", preview);
+    console.log(`✅ Export complete: ${outFile}`);
+  } catch (writeErr) {
+    console.error("❌ Failed to write CSV:", writeErr.message);
+    process.exit(1);
+  }
 } catch (err) {
   console.error("❌ SQLite error:", err.message);
 }
