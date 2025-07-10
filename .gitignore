@@ -2,6 +2,27 @@
 /dist
 .DS_Store
 
-package.json
-package-lock.json
 iExtract-darwin-arm64
+
+# Electron build artifacts
+/dist
+/out
+/build
+
+# Signing & packaging
+*.p12
+*.key
+*.cer
+*.mobileprovision
+*.entitlements.d/*
+
+# VS Code and Mac system files
+.DS_Store
+.vscode
+
+# Secrets
+.env
+.env.local
+
+# Signing identity (if you include it separately)
+signingIdentity.json

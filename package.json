@@ -11,52 +11,8 @@
   "author": "BuiltByWill <builtbywill@proton.me>",
   "devDependencies": {
     "electron": "37.2.0",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
     "electron-rebuild": "3.2.9"
-  },
-  "build": {
-    "appId": "com.builtbywill.iextract",
-    "productName": "iExtract",
-    "files": [
-      "main.js",
-      "preload.js",
-      "index.html",
-      "index.js",
-      "extract.js",
-      "assets/**/*",
-      "build/**/*",
-      "!node_modules/.cache/**"
-    ],
-    "asar": true,
-    "extraFiles": [
-      "extract.js"
-    ],
-    "mac": {
-      "target": "dmg",
-      "icon": "build/icon.icns"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "category": "Utility",
-      "icon": "build/icons/512x512.png"
-    },
-    "copyright": "Copyright © 2025 BuiltByWill"
   },
   "repository": {
     "type": "git",
@@ -75,5 +31,54 @@
   },
   "engines": {
     "node": "20.x"
+  },
+  "build": {
+    "appId": "com.silentprototype.iextract",
+    "productName": "iExtract",
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "index.js",
+      "extract.js",
+      "assets/**/*",
+      "build/**/*",
+      "!node_modules/.cache/**"
+    ],
+    "asar": true,
+    "extraFiles": [
+      "extract.js"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"],
+      "entitlements": "entitlements.mac.plist",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlementsInherit": "entitlements.mac.plist",
+      "sign": true,
+      "teamId": "${APPLE_TEAM_ID}",
+      "identity": "${APPLE_IDENTITY}",
+      "icon": "build/icon.icns"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icons/512x512.png"
+    },
+    "afterSign": "scripts/notarize.js",
+    "copyright": "Copyright © 2025 BuiltByWill"
   }
 }
