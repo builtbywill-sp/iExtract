@@ -37,10 +37,60 @@
         💾 Select output folder for CSV export
       </label>
       <button id="outputBtn">📁 Choose Output Location</button>
-      <span id="outputDisplay" style="margin-left: 10px; font-size: 0.9em; color: #aaa;">No folder selected</span>
+      <span id="outputDisplay" style="margin-left: 10px; font-size: 0.9em; color: #aaa;">❌ No folder selected</span>
       <input type="text" id="outputPath" hidden />
       <button id="mergeFiles">🧬 PREPARE FILES</button>
       <button id="generate">► GENERATE REPORT</button>
     </div>
+</div>
+  <script>
+    // File selection logic can be added here as needed
+    const outputBtn = document.getElementById("outputBtn");
+    const outputDisplay = document.getElementById("outputDisplay");
+    const outputPathInput = document.getElementById("outputPath");
+
+    outputBtn.addEventListener("click", async () => {
+      const result = await window.electronAPI.selectOutputPath();
+      if (result?.success && result.path) {
+        outputPathInput.value = result.path;
+        outputDisplay.textContent = `📂 ${result.path}`;
+        outputDisplay.style.color = "#00ff99";
+      } else {
+        outputPathInput.value = "";
+        outputDisplay.textContent = "❌ No folder selected";
+        outputDisplay.style.color = "#aaa";
+      }
+    });
+
+    const mergeBtn = document.getElementById("mergeFiles");
+    const generateBtn = document.getElementById("generate");
+    const mergeInput = document.getElementById("mergeInput");
+    const fileInput = document.getElementById("fileInput");
+
+    mergeBtn.addEventListener("click", async () => {
+      const files = Array.from(mergeInput.files).map(f => f.path);
+      const chatDb = fileInput.files[0]?.path;
+      if (!chatDb) return alert("Please select your chat.db file.");
+      const paths = [chatDb, ...files];
+      const res = await window.electronAPI.finalizeDatabase(paths);
+      if (res.success) {
+        alert("✅ Files prepared successfully.");
+      } else {
+        alert("❌ Error preparing files: " + res.error);
+      }
+    });
+
+    generateBtn.addEventListener("click", async () => {
+      const dbPath = fileInput.files[0]?.path;
+      const outputPath = outputPathInput.value;
+      if (!dbPath || !outputPath) return alert("Please select both chat.db and output folder.");
+      const res = await window.electronAPI.runExtractor(dbPath, "", "csv", outputPath);
+      if (res.success) {
+        alert("✅ Report generated at: " + res.filename);
+      } else {
+        alert("❌ Failed to generate report: " + res.error);
+      }
+    });
+  </script>
   </body>
 </html>

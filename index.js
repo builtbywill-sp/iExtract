@@ -1,3 +1,4 @@
+const path = require("path");
 const fileInput = document.getElementById("fileInput");
 const generateBtn = document.getElementById("generate");
 const outputBtn = document.getElementById("outputBtn");
@@ -6,11 +7,14 @@ const mergeBtn = document.getElementById("mergeFiles");
 const mergeInput = document.getElementById("mergeInput");
 
 let selectedOutputPath = "";
+const outputPathDisplay = document.getElementById("outputPathDisplay");
 
 fileInput.addEventListener("change", () => {
-  fileLabel.innerHTML = fileInput.files.length
-    ? "📁 <span class='uploaded'>chat.db ready ✅</span>"
-    : "📂 Select <code>chat.db</code>";
+  if (fileInput.files.length) {
+    fileLabel.innerHTML = "📁 <span class='uploaded'>chat.db ready ✅</span>";
+  } else {
+    fileLabel.innerHTML = "📂 Select <code>chat.db</code>";
+  }
 });
 
 generateBtn.addEventListener("click", async () => {
@@ -22,41 +26,29 @@ generateBtn.addEventListener("click", async () => {
   }
 
   const outputPath = selectedOutputPath;
-  console.log("📦 Final output path used for export:", outputPath);
-  if (!outputPath) {
+  if (!outputPath || outputPath === "") {
+    outputPathDisplay.textContent = "❌ No output folder selected.";
+    outputPathDisplay.style.color = "red";
+    outputPathDisplay.style.display = "block";
     return alert("❌ No output location selected.");
   }
 
   const file = fileInput.files[0];
+  let filePath = file.path || file.name;
 
-  if (!file) {
-    console.error("❌ No file selected (fileInput.files[0] is null).");
-    return alert("❌ File input missing.");
+  if (!filePath || !filePath.endsWith(".db")) {
+    return alert(`❌ Invalid file selected: ${filePath}`);
   }
 
-  const filePath = file.path || file.webkitRelativePath || file.name;
-  if (!filePath || (!filePath.includes("chat.db") && !file.name.includes("chat.db"))) {
-    alert("❌ Invalid file path. Please select the actual chat.db file.");
-    return;
-  }
-
-  console.log("🧠 Resolved file path:", filePath, "file object:", file);
-
-  if (!filePath || !outputPath || !format) {
-    console.error("❌ Missing required input:", { filePath, outputPath, format });
-    return alert("❌ Missing input. Please check file, output location, and format.");
-  }
-
-  console.log("📤 Extractor input:", { filePath, phone, format, outputPath });
+  console.log("📤 Extracting:", { filePath, outputPath });
 
   try {
     const result = await window.electronAPI.runExtractor(filePath, phone, format, outputPath);
-
-    alert(`✅ Export complete.\nCheck terminal or output folder.`);
+    alert("✅ Export complete.");
     console.log(result);
   } catch (err) {
-    console.error("❌ Extractor error:", err);
-    alert("❌ Unexpected error: " + err.message);
+    console.error("❌ Error:", err);
+    alert("❌ Extraction failed.");
   }
 });
 
@@ -73,40 +65,37 @@ mergeBtn.addEventListener("click", async () => {
   }
 
   const allFiles = [dbFile, ...otherFiles];
-  const paths = allFiles.map((file) => file.path || file.webkitRelativePath || file.name);
-
-  console.log("🧪 Paths to merge:", paths);
+  const paths = allFiles.map((file) => file.path || file.name);
 
   try {
     const result = await window.electronAPI.finalizeDatabase(paths);
-    alert("✅ Merge complete.\nNow generate your report.");
+    alert("✅ Merge complete.");
     console.log(result);
-
-    if (!result.success) {
-      console.error("❌ Merge process failed with error:", result.error);
-    }
   } catch (err) {
-    console.error("❌ Merge failed:", err);
-    alert("❌ Merge error: " + err.message);
+    console.error("❌ Merge error:", err);
+    alert("❌ Merge failed.");
   }
 });
 
 outputBtn.addEventListener("click", async () => {
   try {
+    console.log("📂 Requesting output path...");
     const outputPath = await window.electronAPI.selectOutputPath();
-    if (!outputPath) {
-      alert("❌ No output location selected.");
-      return;
+    console.log("🧾 Received output path:", outputPath);
+
+    if (!outputPath || outputPath.trim() === "") {
+      outputPathDisplay.textContent = "❌ No output folder selected.";
+      outputPathDisplay.style.color = "red";
+      outputPathDisplay.style.display = "block";
+      return alert("❌ No output location selected.");
     }
-    console.log("📂 Output folder selected:", outputPath);
-    selectedOutputPath = outputPath;
-    const outputPathDisplay = document.getElementById("outputPathDisplay");
-    if (outputPathDisplay) {
-      outputPathDisplay.textContent = outputPath;
-      outputPathDisplay.style.display = "inline";
-    }
+
+    selectedOutputPath = outputPath.trim();
+    outputPathDisplay.textContent = `✅ Output folder:\n${selectedOutputPath}`;
+    outputPathDisplay.style.color = "lime";
+    outputPathDisplay.style.display = "block";
   } catch (err) {
-    console.error("❌ Error selecting output path:", err);
+    console.error("❌ Output selection error:", err);
     alert("❌ Failed to select output path.");
   }
 });
