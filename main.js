@@ -37,24 +37,38 @@ ipcMain.handle("run-extractor", async (event, { dbPath }) => {
       resolve({ success: false, error: "❌ Missing database file." });
       return;
     }
-    const outputDir = "/Users/builtbybrown/Documents/iExtractExports";
+    const outputDir = app.getPath("documents") + "/iExtractExports";
     fs.mkdirSync(outputDir, { recursive: true });
     const timestamp = Date.now();
     const outFile = path.join(outputDir, `iextract_output_${timestamp}.csv`);
-    const scriptPath = path.join(__dirname, "extract.js");
+    const isDev = !app.isPackaged;
+    const scriptPath = isDev
+      ? path.join(__dirname, "extract.js")
+      : path.join(process.resourcesPath, "app.asar.unpacked", "extract.js");
 
     const resolvedDbPath = path.resolve(dbPath);
     const resolvedOutFile = path.resolve(outFile);
     console.log("📁 Executing extractor with paths:", resolvedDbPath, resolvedOutFile);
 
-    execFile("node", [scriptPath, resolvedDbPath, resolvedOutFile], (err, stdout, stderr) => {
+    execFile(process.execPath, [scriptPath, resolvedDbPath, resolvedOutFile], (err, stdout, stderr) => {
+      console.log("Executing:", scriptPath, resolvedDbPath, resolvedOutFile);
+      console.log("STDOUT:", stdout);
+      console.log("STDERR:", stderr);
       if (err) {
         console.error("❌ Extractor execution error:", err);
         resolve({ success: false, error: stderr || err.message });
       } else {
-        const { shell } = require("electron");
-        shell.showItemInFolder(resolvedOutFile);
-        resolve({ success: true, filename: resolvedOutFile });
+        fs.access(resolvedOutFile, fs.constants.F_OK, (accessErr) => {
+          if (accessErr) {
+            console.error("❌ Output file was not created:", resolvedOutFile);
+            resolve({ success: false, error: "Output file not found after script execution." });
+          } else {
+            const { shell } = require("electron");
+            shell.showItemInFolder(resolvedOutFile);
+            console.log("✅ File created successfully:", resolvedOutFile);
+            resolve({ success: true, filename: resolvedOutFile });
+          }
+        });
       }
     });
   });

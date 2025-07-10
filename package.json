@@ -6,13 +6,16 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "rebuild": "electron-rebuild"
+    "build:signed": "env-cmd -f .env electron-builder --mac --publish never",
+    "rebuild": "electron-rebuild",
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "BuiltByWill <builtbywill@proton.me>",
   "devDependencies": {
     "electron": "37.2.0",
     "electron-builder": "^24.13.3",
-    "electron-rebuild": "3.2.9"
+    "electron-rebuild": "3.2.9",
+    "env-cmd": "^10.1.0"
   },
   "repository": {
     "type": "git",
@@ -40,6 +43,7 @@
       "preload.js",
       "index.html",
       "index.js",
+      "index.css",
       "extract.js",
       "assets/**/*",
       "build/**/*",
@@ -51,14 +55,15 @@
     ],
     "mac": {
       "category": "public.app-category.productivity",
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlementsInherit": "entitlements.mac.plist",
-      "sign": true,
-      "teamId": "${APPLE_TEAM_ID}",
-      "identity": "${APPLE_IDENTITY}",
+      "identity": "${APPLE_IDENTITY:-Developer ID Application: William Brown (F38ZFX2553)}",
       "icon": "build/icon.icns"
     },
     "win": {
@@ -68,17 +73,20 @@
       "target": [
         {
           "target": "AppImage",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "deb",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "category": "Utility",
       "icon": "build/icons/512x512.png"
     },
-    "afterSign": "scripts/notarize.js",
     "copyright": "Copyright © 2025 BuiltByWill"
   }
 }

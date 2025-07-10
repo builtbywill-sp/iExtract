@@ -74,7 +74,25 @@ try {
   ].join("\n");
 
   console.log("📁 Attempting to write CSV to:", resolvedOutFile);
-  fs.writeFileSync(resolvedOutFile, csv, "utf-8");
+  const resolvedDir = path.dirname(resolvedOutFile);
+  if (!fs.existsSync(resolvedDir)) {
+    console.warn("📁 Output directory does not exist. Creating:", resolvedDir);
+    fs.mkdirSync(resolvedDir, { recursive: true });
+  }
+
+  // Debug log for the resolved output file path
+  console.log("🧠 Writing to this exact path:", resolvedOutFile);
+  try {
+    fs.writeFileSync(resolvedOutFile, csv, "utf-8");
+    console.log(`✅ CSV successfully written to: ${resolvedOutFile}`);
+  } catch (writeErr) {
+    console.error("❌ WRITE FAILURE:");
+    console.error("💣 Failed Path:", resolvedOutFile);
+    console.error("🛑 Resolved Directory Exists:", fs.existsSync(resolvedDir));
+    console.error("📂 Directory Path:", resolvedDir);
+    console.error("💥 Error Message:", writeErr.stack || writeErr.message || writeErr);
+    process.exit(1);
+  }
   const preview = csv.split('\n').slice(0, 5).join('\n');
   console.log("📝 Preview of CSV output:\n", preview);
   console.log(`✅ Export complete: ${resolvedOutFile}`);
