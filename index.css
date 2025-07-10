@@ -347,3 +347,21 @@ button:hover {
 .back-button:hover {
   background-color: #eaaa42;
 }
+
+/* Hide the file input element */
+#fileInput {
+  display: none;
+}
+
+/* TEMP: Hide all except the generate button */
+.subline,
+label,
+input,
+select,
+.date-range,
+.file-ready,
+.uploaded,
+.message-box,
+button:first-of-type {
+  display: none !important;
+}

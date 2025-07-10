@@ -5,33 +5,48 @@ const Database = require("better-sqlite3");
 const dbFile = process.argv[2];
 const outFile = process.argv[3];
 
-console.log("🧪 Running extract.js");
-console.log("📂 dbFile:", dbFile);
-console.log("📤 outFile:", outFile);
-
 if (!dbFile || !outFile) {
+  console.error("❌ Invalid arguments passed to extract.js");
+  console.error("  dbFile:", dbFile);
+  console.error("  outFile:", outFile);
   console.error("❌ Usage: node extract.js path/to/chat.db path/to/output.csv");
   process.exit(1);
 }
 
-if (!fs.existsSync(dbFile)) {
+const resolvedDbFile = path.resolve(dbFile);
+const resolvedOutFile = path.resolve(outFile);
+
+console.log("🧪 Running extract.js");
+console.log("📂 dbFile:", resolvedDbFile);
+console.log("📤 outFile:", resolvedOutFile);
+
+if (!fs.existsSync(resolvedDbFile)) {
   console.error("❌ Missing or invalid chat.db file.");
   process.exit(1);
 }
 
 try {
-  const db = new Database(dbFile);
+  const db = new Database(resolvedDbFile);
   const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table';").all();
   console.log("🧬 Tables in DB:", tables.map(t => t.name).join(", "));
 
   const stmt = db.prepare(`
     SELECT
-      NULL AS message_date,
-      NULL AS sender_or_recipient,
-      NULL AS is_from_me,
-      NULL AS text,
-      NULL AS chat_id
-    WHERE 0;
+      datetime(message.date / 1000000000 + strftime('%s','2001-01-01'), 'unixepoch', 'localtime') AS message_date,
+      handle.id AS sender_or_recipient,
+      message.is_from_me,
+      message.text,
+      chat.rowid AS chat_id
+    FROM
+      message
+    LEFT JOIN
+      handle ON message.handle_id = handle.rowid
+    LEFT JOIN
+      chat_message_join ON message.rowid = chat_message_join.message_id
+    LEFT JOIN
+      chat ON chat_message_join.chat_id = chat.rowid
+    ORDER BY
+      message.date ASC;
   `);
 
   const rows = stmt.all();
@@ -58,11 +73,11 @@ try {
     })
   ].join("\n");
 
-  console.log("📁 Attempting to write CSV to:", outFile);
-  fs.writeFileSync(outFile, csv, "utf-8");
+  console.log("📁 Attempting to write CSV to:", resolvedOutFile);
+  fs.writeFileSync(resolvedOutFile, csv, "utf-8");
   const preview = csv.split('\n').slice(0, 5).join('\n');
   console.log("📝 Preview of CSV output:\n", preview);
-  console.log(`✅ Export complete: ${outFile}`);
+  console.log(`✅ Export complete: ${resolvedOutFile}`);
   console.log("✅ CSV generation logic executed without error.");
 } catch (err) {
   console.error("❌ UNCAUGHT ERROR:");

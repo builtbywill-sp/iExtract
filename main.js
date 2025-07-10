@@ -31,24 +31,30 @@ app.on("window-all-closed", () => {
 });
 
 // 🔁 Run extractor with db + output
-ipcMain.handle("run-extractor", async (event, { dbPath, outputPath }) => {
+ipcMain.handle("run-extractor", async (event, { dbPath }) => {
   return new Promise((resolve) => {
-    if (!dbPath || !outputPath) {
-      resolve({ success: false, error: "❌ Missing database or output path." });
+    if (!dbPath) {
+      resolve({ success: false, error: "❌ Missing database file." });
       return;
     }
+    const outputDir = "/Users/builtbybrown/Documents/iExtractExports";
+    fs.mkdirSync(outputDir, { recursive: true });
     const timestamp = Date.now();
-    const outFile = path.join(outputPath, `iextract_output_${timestamp}.csv`);
+    const outFile = path.join(outputDir, `iextract_output_${timestamp}.csv`);
     const scriptPath = path.join(__dirname, "extract.js");
 
-    execFile("node", [scriptPath, dbPath, outFile], (err, stdout, stderr) => {
+    const resolvedDbPath = path.resolve(dbPath);
+    const resolvedOutFile = path.resolve(outFile);
+    console.log("📁 Executing extractor with paths:", resolvedDbPath, resolvedOutFile);
+
+    execFile("node", [scriptPath, resolvedDbPath, resolvedOutFile], (err, stdout, stderr) => {
       if (err) {
         console.error("❌ Extractor execution error:", err);
         resolve({ success: false, error: stderr || err.message });
       } else {
         const { shell } = require("electron");
-        shell.showItemInFolder(outFile);
-        resolve({ success: true, filename: outFile });
+        shell.showItemInFolder(resolvedOutFile);
+        resolve({ success: true, filename: resolvedOutFile });
       }
     });
   });
@@ -82,6 +88,11 @@ ipcMain.handle("finalizeDatabase", async (event, filePaths) => {
   }
 
   try {
+    if (!Array.isArray(filePaths) || filePaths.length !== 3 || !filePaths[0]) {
+      console.error("❌ Invalid filePaths input to finalizeDatabase:", filePaths);
+      return { success: false, error: "Missing or invalid input files." };
+    }
+
     const sqlite3 = require("sqlite3").verbose();
     const db = new sqlite3.Database(filePaths[0]);
 
@@ -100,11 +111,14 @@ ipcMain.handle("finalizeDatabase", async (event, filePaths) => {
   }
 });
 
-// Handler for selecting the output path
-ipcMain.handle("choose-output-path", async () => {
+// Handler for selecting a chat.db file
+ipcMain.handle("choose-chat-db", async () => {
   const result = await dialog.showOpenDialog({
-    title: "Choose Output Folder",
-    properties: ["openDirectory"]
+    title: "Select chat.db file",
+    properties: ["openFile"],
+    filters: [
+      { name: "SQLite Database", extensions: ["db"] }
+    ]
   });
 
   if (result.canceled || result.filePaths.length === 0) {

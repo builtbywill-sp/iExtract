@@ -15,23 +15,17 @@ fileInput.addEventListener("change", () => {
 });
 
 generateBtn.addEventListener("click", async () => {
-  if (!fileInput.files.length) {
-    return alert("❌ No file selected.");
-  }
-
-  const outputPath = await window.electronAPI.selectOutputPath();
-  if (!outputPath) {
-    return alert("❌ No output path selected.");
-  }
-
-  const file = fileInput.files[0];
-  const filePath = file.path || file.name;
+  const filePath = await window.electronAPI.chooseChatDb();
   if (!filePath) {
-    return alert("❌ Failed to retrieve file path.");
+    return alert("❌ No chat.db file selected.");
   }
+
+  console.log("📦 Selected file path:", filePath);
+
+  console.log("🚀 Sending to extractor:", { dbPath: filePath });
 
   try {
-    const result = await window.electronAPI.runExtractor({ dbPath: filePath, outputPath });
+    const result = await window.electronAPI.runExtractor({ dbPath: filePath });
 
     alert(`✅ Export complete.\nCheck terminal or output folder.`);
     console.log(result);

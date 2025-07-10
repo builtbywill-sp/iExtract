@@ -28,7 +28,9 @@
       "!node_modules/.cache/**"
     ],
     "asar": true,
-    "extraFiles": ["extract.js"],
+    "extraFiles": [
+      "extract.js"
+    ],
     "mac": {
       "target": "dmg",
       "icon": "build/icon.icns"
@@ -68,7 +70,8 @@
   },
   "homepage": "https://github.com/builtbywill-sp/iExtract#readme",
   "dependencies": {
-    "better-sqlite3": "12.2.0"
+    "better-sqlite3": "12.2.0",
+    "sqlite3": "^5.1.7"
   },
   "engines": {
     "node": "20.x"
