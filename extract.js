@@ -102,3 +102,14 @@ try {
   console.error(err.stack || err.message || err);
   process.exit(1);
 }
+// Allow direct execution for dev testing
+if (require.main === module) {
+  const [,, dbPath, outputPath] = process.argv;
+  if (!dbPath || !outputPath) {
+    console.error("❌ Usage: node extract.js <path/to/chat.db> <path/to/output.csv>");
+    process.exit(1);
+  }
+
+  // You can test this line in dev directly:
+  console.log(`✅ Dev Test - Running with DB: ${dbPath} to OUTPUT: ${outputPath}`);
+}
