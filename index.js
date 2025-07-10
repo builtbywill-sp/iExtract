@@ -1,54 +1,43 @@
-const path = require("path");
 const fileInput = document.getElementById("fileInput");
 const generateBtn = document.getElementById("generate");
-const outputBtn = document.getElementById("outputBtn");
 const fileLabel = document.getElementById("fileLabel");
 const mergeBtn = document.getElementById("mergeFiles");
 const mergeInput = document.getElementById("mergeInput");
 
-let selectedOutputPath = "";
-const outputPathDisplay = document.getElementById("outputPathDisplay");
+if (!window.electronAPI) {
+  console.warn("⚠️ window.electronAPI is not available. Check preload.js exposure.");
+}
 
 fileInput.addEventListener("change", () => {
-  if (fileInput.files.length) {
-    fileLabel.innerHTML = "📁 <span class='uploaded'>chat.db ready ✅</span>";
-  } else {
-    fileLabel.innerHTML = "📂 Select <code>chat.db</code>";
-  }
+  fileLabel.innerHTML = fileInput.files.length
+    ? "📁 <span class='uploaded'>chat.db ready ✅</span>"
+    : "📂 Select <code>chat.db</code>";
 });
 
 generateBtn.addEventListener("click", async () => {
-  const phone = "";
-  const format = "csv";
-
   if (!fileInput.files.length) {
     return alert("❌ No file selected.");
   }
 
-  const outputPath = selectedOutputPath;
-  if (!outputPath || outputPath === "") {
-    outputPathDisplay.textContent = "❌ No output folder selected.";
-    outputPathDisplay.style.color = "red";
-    outputPathDisplay.style.display = "block";
-    return alert("❌ No output location selected.");
+  const outputPath = await window.electronAPI.selectOutputPath();
+  if (!outputPath) {
+    return alert("❌ No output path selected.");
   }
 
   const file = fileInput.files[0];
-  let filePath = file.path || file.name;
-
-  if (!filePath || !filePath.endsWith(".db")) {
-    return alert(`❌ Invalid file selected: ${filePath}`);
+  const filePath = file.path || file.name;
+  if (!filePath) {
+    return alert("❌ Failed to retrieve file path.");
   }
 
-  console.log("📤 Extracting:", { filePath, outputPath });
-
   try {
-    const result = await window.electronAPI.runExtractor(filePath, phone, format, outputPath);
-    alert("✅ Export complete.");
+    const result = await window.electronAPI.runExtractor({ dbPath: filePath, outputPath });
+
+    alert(`✅ Export complete.\nCheck terminal or output folder.`);
     console.log(result);
   } catch (err) {
-    console.error("❌ Error:", err);
-    alert("❌ Extraction failed.");
+    console.error("❌ Extractor error:", err);
+    alert(`❌ Unexpected error:\n${err?.message || err}`);
   }
 });
 
@@ -65,37 +54,20 @@ mergeBtn.addEventListener("click", async () => {
   }
 
   const allFiles = [dbFile, ...otherFiles];
-  const paths = allFiles.map((file) => file.path || file.name);
+  const paths = allFiles.map((file) => file.path);
+
+  console.log("🧪 Paths to merge:", paths);
 
   try {
     const result = await window.electronAPI.finalizeDatabase(paths);
-    alert("✅ Merge complete.");
+    alert("✅ Merge complete.\nNow generate your report.");
     console.log(result);
-  } catch (err) {
-    console.error("❌ Merge error:", err);
-    alert("❌ Merge failed.");
-  }
-});
 
-outputBtn.addEventListener("click", async () => {
-  try {
-    console.log("📂 Requesting output path...");
-    const outputPath = await window.electronAPI.selectOutputPath();
-    console.log("🧾 Received output path:", outputPath);
-
-    if (!outputPath || outputPath.trim() === "") {
-      outputPathDisplay.textContent = "❌ No output folder selected.";
-      outputPathDisplay.style.color = "red";
-      outputPathDisplay.style.display = "block";
-      return alert("❌ No output location selected.");
+    if (!result.success) {
+      console.error("❌ Merge process failed with error:", result.error);
     }
-
-    selectedOutputPath = outputPath.trim();
-    outputPathDisplay.textContent = `✅ Output folder:\n${selectedOutputPath}`;
-    outputPathDisplay.style.color = "lime";
-    outputPathDisplay.style.display = "block";
   } catch (err) {
-    console.error("❌ Output selection error:", err);
-    alert("❌ Failed to select output path.");
+    console.error("❌ Merge failed:", err);
+    alert(`❌ Merge error:\n${err?.message || err}`);
   }
 });
